@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <div class="container">
+        <h1>{{ pokemon.name }}</h1>
+        <div class="actions">
+            <a href="{% url 'pokemon_update' pokemon.id %}">Edit</a>
+            <a href="{% url 'pokemon_delete' pokemon.id %}">Delete</a>
+        </div>
+
+        <form action="{% url 'capture' pokemon.id %}" method="POST">
+            {% csrf_token %}
+            {{ caught_form.as_p }}
+
+            <input type="submit" class="btn" value="CAPTURED">
+            <ul class="captured-list">
+                {% for caught in pokemon.caught_set.all %}
+                    <li><strong>CAPTURED:</strong> {{ caught.get_caught_display }}</li>
+                {% endfor %}
+            </ul>
+        </form>
+
+        <div class="Rarity">
+            <h3>{{ pokemon.name }}'s Rarity</h3>
+            
+            {% if pokemon.rarity.count %}
+                {% for rarity in pokemon.rarity.all %}
+                    <p><strong>Name:</strong> {{ rarity.name }}</p>
+                    <p><strong>Description:</strong> {{ rarity.description }}</p>
+                {% endfor %}
+            {% else %}
+                <h5>No Scaled</h5>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
+{% endblock %}
+
